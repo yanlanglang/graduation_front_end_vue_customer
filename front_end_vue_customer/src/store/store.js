@@ -7,7 +7,10 @@ Vue.use(Vuex)
 
 const state = {
     isLogin: false,
-    customer: null
+    customer: null,
+    article: null,
+    activeIndex: '1',
+
 }
 
 const mutations = {
@@ -22,6 +25,14 @@ const mutations = {
         state.customer = data;
         state.customer.avatar = 'http://localhost:8000/yl'+state.customer.avatar;
         
+    },
+
+    changeArticle(state, data){
+        state.article = data;
+    },
+
+    changeActiveIndex(state, data){
+        state.activeIndex = data;
     }
 
 }

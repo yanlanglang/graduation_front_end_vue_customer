@@ -8,6 +8,10 @@ import EditorBlog from "../components/article/EditorBlog";
 import ShowAllBlog from "../components/article/ShowAllBlog";
 import ShowABlog from "../components/article/ShowABlog";
 
+import ShowExamples from "../components/example/ShowExamples"
+
+import ShowMessages from "../components/message/ShowMessages"
+
 import BlocklyOnLine from "../components/blockly/BlocklyOnLine";
 import Johnny5OnLine from "../components/johnny5/Johnny5OnLine"
 
@@ -40,6 +44,14 @@ export default new Router({
     {
       path: '/show-blog',
       component: ShowABlog
+    },
+    {
+      path: '/show-examples',
+      component: ShowExamples
+    },
+    {
+      path: '/show-messages',
+      component: ShowMessages
     },
     {
       path: '/blockly-online',

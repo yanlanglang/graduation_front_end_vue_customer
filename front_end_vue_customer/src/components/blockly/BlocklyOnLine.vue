@@ -90,9 +90,9 @@
       </div>
     </el-main>
 
-    <el-footer>
+    <!-- <el-footer>
       <BottomNav />
-    </el-footer>
+    </el-footer> -->
   </el-container>
 </template>
 
@@ -114,12 +114,11 @@ import { options } from "@/api/blockly/blockly_config";
 /*自定义的组件*/
 import CodeMirrorModel from "../fragment/CodeMirrorModel";
 import TopNav from "../fragment/TopNav";
-import BottomNav from "../fragment/BottomNav";
+// import BottomNav from "../fragment/BottomNav";
 
 export default {
   name: "BlocklyOnLineComponent",
   components: {
-    BottomNav,
     TopNav,
     BlocklyModel,
     CodeMirrorModel

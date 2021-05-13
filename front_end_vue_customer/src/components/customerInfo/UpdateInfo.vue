@@ -96,8 +96,6 @@ export default {
     };
   },
   methods: {
-
-
     /*改变时触发*/
     handleChange(file) {
       const typeArr = ["image/png", "image/gif", "image/jpeg", "image/jpg"];
@@ -108,17 +106,16 @@ export default {
       if (!isJPG) {
         this.$message.error("只能是图片!");
         this.$refs.upload.clearFiles();
-        this.files = null;
+        this.file = null;
         return;
       }
       if (!isLt3M) {
         this.$message.error("上传图片大小不能超过 3MB!");
         this.$refs.upload.clearFiles();
-        this.files = null;
+        this.file = null;
         return;
       }
-      this.files = file.raw;
-      //console.log(file);
+      this.file = file.raw;
     },
     /*删除前触发*/
     handleRemove(file, fileList) {
@@ -139,14 +136,28 @@ export default {
       this.$store.commit("changeCustomer", customer);
       //刷新当前页面
       //this.reload();
-      
+
       this.$router.go(0);
     },
 
-    /*提交其它信息(除头像)*/
+    /*提交信息*/
     submitForm(ruleForm) {
-      //上传图片和相关表单信息
-      this.$refs.upload.submit();
+      //判断是否有文件
+      if (this.file) {
+        //上传图片和相关表单信息
+        this.$refs.upload.submit();
+      } else {
+        this.$axios.post(this.$baseUrl+'/customer/editInfo',Qs.stringify(this.formModel))
+        .then(res => {
+          
+          var customer = res.data.data;
+          this.$store.commit("changeCustomer", customer);
+          this.$router.go(0);
+        })
+        .catch(err => {
+          this.$message.error("服务器发生错误！");
+        })
+      }
     },
   },
   mounted() {

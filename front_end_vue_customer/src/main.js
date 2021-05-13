@@ -56,3 +56,18 @@ Vue.filter('timeFormat', function (data) {
   //返回模板
   return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
 })
+
+
+Vue.filter('stringSplit', function (data) {
+
+  var length = data.length;
+  
+  if(length >= 20){
+    //截取字符串，防止字符串过长
+    var s = data.substring(0,20);
+    return s+'...'; 
+  }else {
+    return data;
+  }
+
+})

@@ -14,17 +14,20 @@
         <el-row class="baseInfo">
           <!-- 头像 -->
           <el-col :span="6">
-            <el-avatar :src="'http://localhost:8000/yl/'+articleObj.customer.avatar"
-              
+            <el-avatar
+              v-if="articleObj.customer !== null"
+              :src="'http://localhost:8000/yl/' + articleObj.customer.avatar"
             ></el-avatar>
+            <el-avatar v-else src="static\images\adminAvatar.jpg"></el-avatar>
           </el-col>
           <!-- 昵称 -->
-          <el-col :span="6"
-            ><span v-text="articleObj.customer.nickname">昵称</span></el-col
-          >
+          <el-col :span="6">
+            <span v-if="articleObj.customer!==null" v-text="articleObj.customer.nickname">昵称</span>
+            <span v-else style="color:#67C23A">管理员</span>
+          </el-col>
           <!-- 发布时间 -->
           <el-col :span="6"
-            ><span >{{articleObj.createTime | timeFormat}}</span></el-col
+            ><span>{{ articleObj.createTime | timeFormat }}</span></el-col
           >
           <!-- 分类名字 -->
           <el-col :span="6"
@@ -37,31 +40,28 @@
         <el-collapse @change="updateComment" accordion>
           <!-- 标题 -->
           <el-row class="title">
-            <b v-text="articleObj.title" style="font-size: 20px">
-              标题
-            </b>
+            <b v-text="articleObj.title" style="font-size: 20px"> 标题 </b>
           </el-row>
           <!-- 简介 -->
           <el-row class="description">
-            <q  v-text="articleObj.description" style="font-size: 18px">
+            <q v-text="articleObj.description" style="font-size: 18px">
               简介
             </q>
           </el-row>
           <!-- 正文(初始化时不显示) -->
-          <el-row >
+          <el-row>
             <!-- 折叠面板的方式显示正文 -->
             <el-collapse-item title="正文">
-              <div v-html="articleObj.content" style="font-size: 14px">    
-              </div>
+              <div v-html="articleObj.content" style="font-size: 14px"></div>
             </el-collapse-item>
           </el-row>
-        
+
           <!-- 评论 -->
-          <el-row >
+          <el-row>
             <!-- 折叠面板的方式显示正文 -->
             <el-collapse-item title="评论" :name="articleObj.id + 'comments'">
               <!-- 点击之后加载 -->
-              <div style="font-size: 14px">
+              <div align="center" style="font-size: 14px">
                 <!-- 限制长短的输入框 -->
                 <el-row>
                   <!-- v-model="textarea" -->
@@ -83,12 +83,12 @@
                     >
                   </el-col>
                 </el-row>
-                <el-row>
-                  <span style="color:#409EFF " v-show="showTip">该篇文章还没有评论...</span>
-                </el-row>
-
+               
                 <!-- 遍历commentInfo模板 -->
-                <div v-for="parentComment in parentComments" :key="parentComment.id">
+                <div
+                  v-for="parentComment in parentComments"
+                  :key="parentComment.id"
+                >
                   <comment-model
                     @updatePlaceholder="updatePlaceholder"
                     :articleAuthorId="articleObj.customerId"
@@ -100,29 +100,24 @@
               </div>
             </el-collapse-item>
           </el-row>
-
-         
         </el-collapse>
       </el-main>
-      
     </el-container>
   </div>
 </template>
 
 <script>
-
 import CommentModel from "../fragment/CommentModel";
-
 
 export default {
   name: "articleModel",
   components: {
-    CommentModel
+    CommentModel,
   },
 
   //在props属性里接受父组件传递过来的数据
   props: {
-      //article里面的content需要动态加载
+    //article里面的content需要动态加载
     articleObj: {
       type: Object,
     },
@@ -134,26 +129,24 @@ export default {
       replyInput: "",
       parentComments: [],
       showTip: true,
-      placeholderWithNickname: '请输入评论内容...',
-      replyObj: null
+      placeholderWithNickname: "请输入评论内容...",
+      replyObj: null,
     };
   },
   methods: {
     //判断作为子评论提交的依据
-    updatePlaceholder(data){
+    updatePlaceholder(data) {
       this.replyObj = data;
       //console.log(this.replyObj);
-      this.placeholderWithNickname = '回复 @'+data.nickname;
+      this.placeholderWithNickname = "回复 @" + data.nickname;
     },
 
     //相关判断
-    judge() {
-      
-    },
+    judge() {},
 
     //点开'评论'进行加载评论信息
     updateComment() {
-        //获取评论信息
+      //获取评论信息
       this.$axios
         .get(this.$baseUrl + "/comment/search", {
           params: {
@@ -161,18 +154,16 @@ export default {
           },
         })
         .then((res) => {
-          
           //一篇文章的所有父级(根节点)评论(Array)
           this.parentComments = res.data.data;
 
-          console.log(this.parentComments);
+          //console.log(this.parentComments);
 
-          if(this.parentComments.length===0){
+          if (this.parentComments.length === 0) {
             this.showTip = true;
-          }else{
+          } else {
             this.showTip = false;
           }
-          
         })
         .catch((err) => {
           console.log(err);
@@ -199,63 +190,59 @@ export default {
         }
 
         //判断是否作为父评论提交
-        if(this.replyObj===null){
+        if (this.replyObj === null) {
           //作为父评论提交
           this.$axios
-          .get(this.$baseUrl + "/comment/saveParentReply", {
-            params: {
-              authorComment: isAuthorComment,
-              customerId: loginId,
-              content: this.replyInput,
-              articleId: this.articleObj.id,
-            },
-          })
-          .then((res) => {
-            this.$message.success("提交评论成功!");
+            .get(this.$baseUrl + "/comment/saveParentReply", {
+              params: {
+                authorComment: isAuthorComment,
+                customerId: loginId,
+                content: this.replyInput,
+                articleId: this.articleObj.id,
+              },
+            })
+            .then((res) => {
+              this.$message.success("提交评论成功!");
 
-            this.replyInput = "";
-            
-            this.updateComment();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        }else{
+              this.replyInput = "";
+
+              this.updateComment();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
           //作为子评论提交
           this.$axios
-          .get(this.$baseUrl + "/comment/saveChildrenReply", {
-            params: {
-              authorComment: isAuthorComment,
-              customerId: loginId,
-              content: this.replyInput,
-              articleId: this.articleObj.id,
-              commentId: this.replyObj.commentId,
-            },
-          })
-          .then((res) => {
-            this.$message.success("提交评论成功!");
-            this.replyInput = "";
-            
-            this.updateComment();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+            .get(this.$baseUrl + "/comment/saveChildrenReply", {
+              params: {
+                authorComment: isAuthorComment,
+                customerId: loginId,
+                content: this.replyInput,
+                articleId: this.articleObj.id,
+                commentId: this.replyObj.commentId,
+              },
+            })
+            .then((res) => {
+              this.$message.success("提交评论成功!");
+              this.replyInput = "";
+
+              this.updateComment();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
 
         return false;
-
-        
       } else {
         this.$message.error("评论不能为空!");
       }
-     
     },
   },
   mounted() {
-    
     //console.log(this.articleObj);
-  }
+  },
 };
 </script>
 
@@ -270,7 +257,5 @@ export default {
 
 .description {
   text-align: center;
-  }
-
-
+}
 </style>

@@ -25,7 +25,7 @@
 
             <el-col :span="8">
               <!--运行-->
-              <el-button plain @click="showCode">运行</el-button>
+              <el-button disabled plain @click="showCode">运行</el-button>
             </el-col>
 
 
@@ -90,9 +90,9 @@
       </div>
     </el-main>
 
-    <el-footer>
+    <!-- <el-footer>
       <BottomNav />
-    </el-footer>
+    </el-footer> -->
   </el-container>
 </template>
 
@@ -113,14 +113,14 @@ import {options} from "@/api/johnny5/johnny5_define_config"
 
 /*自定义的组件*/
 import TopNav from "../fragment/TopNav";
-import BottomNav from "../fragment/BottomNav";
+// import BottomNav from "../fragment/BottomNav";
 import CodeMirrorModel from '../fragment/CodeMirrorModel';
 
 
 export default {
   name: "Johnny5OnLineComponent",
   components: {
-    BottomNav,
+
     TopNav,
     Johnny5Model,
     CodeMirrorModel
