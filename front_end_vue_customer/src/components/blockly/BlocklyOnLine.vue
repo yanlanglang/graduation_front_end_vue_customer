@@ -109,12 +109,13 @@ import BlocklyXml from "blockly/blockly_compressed";
 import FileSaver from "file-saver";
 
 // 导入bloockly的配置
-import { options } from "@/api/blockly/blockly_config";
+import { options } from "@/api/dsaa/dsaa_define_config";
 
 /*自定义的组件*/
 import CodeMirrorModel from "../fragment/CodeMirrorModel";
 import TopNav from "../fragment/TopNav";
 // import BottomNav from "../fragment/BottomNav";
+
 
 export default {
   name: "BlocklyOnLineComponent",
@@ -153,6 +154,17 @@ export default {
         this.$message.warning("不能运行xml文件!");
         return false;
       }
+      //如果是js就直接当前页面运行
+      if(this.codeType === "javascript"){
+        try {
+          eval(this.code);
+        } catch (error) {
+          this.$message.error(error);
+        }
+        
+        return false;
+      }
+
 
       //提交到服务器
       this.$axios

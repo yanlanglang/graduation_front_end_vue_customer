@@ -31,16 +31,18 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-import Blockly from "blockly";
+//import Blockly from "blockly";
+import { blockly } from "@/api/dsaa/dsaa_define_package";
 
 import BlocklyPhp from "blockly/php";
 import BlocklyPython from "blockly/python";
 import BlocklyJS from "blockly/javascript";
 import BlocklyXml from "blockly/blockly_compressed";
-
+//自定义johnny的块
+import { customBlocks } from "@/api/dsaa/dsaa_define_blocks";
 
 export default {
-  name: "BlocklyComponent",
+  name: "BlocklyModel",
   props: ["options", "type"],
   data() {
     return {
@@ -54,7 +56,7 @@ export default {
     if (!options.toolbox) {
       options.toolbox = this.$refs["blocklyToolbox"];
     }
-    this.workspace = Blockly.inject(this.$refs["blocklyDiv"], options);
+    this.workspace = blockly.inject(this.$refs["blocklyDiv"], options);
     this.workspace.addChangeListener(this.blocklyListener);
   },
   methods: {

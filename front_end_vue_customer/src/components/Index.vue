@@ -210,7 +210,6 @@ export default {
     this.$axios
       .get(this.$baseUrl + "/adminArticles")
       .then((res) => {
-        //console.log(res);
         this.adminArticles = res.data.data;
       })
       .catch((err) => {});
